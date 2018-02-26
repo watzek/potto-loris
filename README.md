@@ -1,46 +1,50 @@
-# Potto—Loris IIIF image server for AWS
+# vogel iiif server
 
-Alternative deployment for [loris IIF image server](https://github.com/loris-imageserver/loris),
-designed to run in [Amazon Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) 
-and serve images stored in [Amazon Simple Storage Service (S3)](https://aws.amazon.com/s3/)
+vogel is a modified version of [potto](), which is itself an alternative deployment for [loris](https://github.com/loris-imageserver/loris). it is designed to run in [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) and serve images stored in [AWS S3](https://aws.amazon.com/s3/) as a [iiif compliant](http://iiif.io/api/image/2.1/) image server.
 
-The Loris `setup.py` is more like an application installer rather than something that should be run by `pip`.  (It wants specific users on the system to exist, for example.).
+## Getting Started
+### Prerequisites
+- [Python 2.7](https://www.python.org/download/releases/2.7/)
 
-To deploy to a beanstalk python app server, this uses `git` to grab the `#development` branch of the offical Loris, and then it subclasses (to override configuration style and to provide an S3 resolver) and monkey patches (to provide a stub for a healh check URL) loris.  `./deploy-version.sh` creates a `.zip` file of the application and deploys it to a beanstalk environment.
+### Installing
+clone the repository:
+```sh
+$ git clone https://github.com/watzek/vogel.git
+$ cd vogel
+```
+install dependencies:
+```sh
+$ pip install -r requirements.txt
+```
+## Development
+coming soon!
+## Deployment
+### Configuration
+ensure that environment variables are set in AWS EB control panel:
+- `SOURCE_ROOT` s3:// URL to s3 bucket and prefix where images are stored
 
-## Configuration
+optionally, set the following:
+- `CACHE_ROOT` default `/cache` in loris app directory
+- `LOG_LEVEL` default `INFO` of CRITICAL | ERROR | WARNING | INFO | DEBUG	| NOTSET - output goes to `/var/log/httpd/error_log` which gets shipped by default when you request logs from beanstalk.
 
-See [Configuring Python Containers with Elastic Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create-deploy-python-container.html)
+### Uploading
+check the environment names and versions already in beanstalk:
+```sh
+$ ./beanstalk-describe.sh
+#
+# '--version-label's (last 20 version names already used)
+# ...
+#
+# '--environment-names's
+# ...
+```
+you can zip and upload a new version with `deploy-version.sh vX.Y.Z env-name`, e.g.
+```sh
+$ ./deploy-version.sh v1.6.2 vogel-prod
+```
+note that you can't deploy on top of an existing version - you need to either delete it from the aws eb console, or bump the version number up.
 
-Set these in the environment.
-
-`SOURCE_ROOT` s3:// URL to s3 bucket and prefix where jp2s are stored
-
-`LOG_LEVEL` default `INFO` of CRITICAL | ERROR | WARNING | INFO	| DEBUG	| NOTSET -- output goes to `/var/log/httpd/error_log` which gets shipped by default when you request logs from beanstalk.
-
-## format support
-Currently all images in `SOURCE_ROOT` are assumed to be jpeg2000s.
-
-## deploy script
-`./deploy-version.sh` will need to be customized to your app (setting correct application etc.).
-
-## dev server
-`python loris2.wsgi.py` starts a wsgi server on `:8989` for local testing.  You should set up a
-special set of credentials in AWS IAM with readonly access to the bucket and path where the 
-jpeg 2000 files are kept.
-
-## pictures of animals
-
-### We are Potto
-<img width="511" alt="potto" src="https://cloud.githubusercontent.com/assets/227374/9700690/02418f4a-53c1-11e5-9e6b-1db47fd8caa3.png">
-
-[potto picture source](https://commons.wikimedia.org/wiki/File:PottoCincyZoo.jpg) CC BY 3.0 [Ltshears](https://commons.wikimedia.org/wiki/User:Ltshears)
-
-### Our cousin Loris
-<img width="261" alt="loris" src="https://cloud.githubusercontent.com/assets/227374/9700689/fcfebb02-53c0-11e5-8ab6-c96fb98ba126.png">
-
-[loris picture source](https://commons.wikimedia.org/wiki/File:Smit.Faces_of_Lorises.jpg)
-
+version zipfiles are stored in the same s3 bucket currently used to serve images (`vogel-iiif`).
 ## License
 
 Copyright © 2015, Regents of the University of California

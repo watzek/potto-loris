@@ -31,7 +31,7 @@ log.addHandler(handler)
 
 loris.webapp.logger = log
 
-group =  grp.getgrgid(os.getgid()).gr_name
+group = grp.getgrgid(os.getgid()).gr_name
 
 log.debug(u'user={0} group={1}'.format(getpass.getuser(), group))
 log.debug(u'uid={0} gid={1}'.format(os.getuid(), os.getgid()))
@@ -41,7 +41,6 @@ application = loris.webapp.Loris(
         'loris.Loris': {
             'tmp_dp': join(DIR, 'tmp'),
             'www_dp': join(DIR, 'loris', 'www'),
-            # 'enable_caching': False,
             'enable_caching': True,
             'redirect_canonical_image_request': False,
             'redirect_id_slash_to_info': True
@@ -85,11 +84,9 @@ application = loris.webapp.Loris(
     }
 )
 
-
 def status_check():
     ''' do some sort of health check here '''
     return True
-
 
 def simple_dissect_uri(request):
     # we can use a much simpler uri dissector that does not have to call

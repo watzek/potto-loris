@@ -1,9 +1,9 @@
-Pillow==2.9.0
-Werkzeug==0.10.4
-boto==2.38.0
-configobj==5.0.0
-mock==1.0.1
-requests==2.5.1
-responses==0.3.0
-six==1.9.0
-wsgiref==0.1.2
+werkzeug >= 0.11.4
+pillow >= 2.9.0
+configobj >= 4.7.2,<=5.0.0
+requests >= 2.12.0
+netaddr >= 0.7.19
+pyjwt >= 1.5.2
+cryptography >= 2.0.3
+attrs >= 17.3.0
+boto3 >= 1.5.22

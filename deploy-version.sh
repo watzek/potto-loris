@@ -1,5 +1,5 @@
-#!/bin/env bash
-if [[ -n "$DEBUG" ]]; then 
+#!/usr/bin/env bash
+if [[ -n "$DEBUG" ]]; then
   set -x
 fi
 
@@ -23,11 +23,11 @@ fi
 
 set -u
 
-DIR=potto-loris-beanstalk
-BUCKET=ucldc-private-files
+DIR=vogel-beanstalk
+BUCKET=vogel-iiif
 REGION=us-west-2
-APPNAME=potto-loris
-ZIP=potto-loris-$1.zip
+APPNAME=vogel
+ZIP=vogel-$1.zip
 
 if ! [[ -d "loris" ]]; then
   git clone https://github.com/loris-imageserver/loris.git --depth=1
@@ -61,7 +61,7 @@ env_exists=$(aws elasticbeanstalk describe-environments \
 if [[ env_exists -ne 1 ]]
   then
     echo "environment $2 does not exist"
-    usage    
+    usage
 fi
 
 # deploy app to a running environment
@@ -71,13 +71,13 @@ aws elasticbeanstalk update-environment \
   --version-label "$1"
 
 # Copyright (c) 2015, Regents of the University of California
-# 
+#
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
 # met:
-# 
+#
 # - Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
 # - Redistributions in binary form must reproduce the above copyright
